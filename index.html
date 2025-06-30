@@ -115,14 +115,20 @@
 
   // Ajuste la taille du canvas et imgSize selon la largeur affichée
   function adjustCanvasSize() {
-    const computedStyle = getComputedStyle(canvas);
-    const width = parseFloat(computedStyle.width);
-    canvas.width = width;
-    // hauteur proportionnelle 5:8 (car 800x500)
-    canvas.height = (width * 12) / 8;
-    // taille image proportionnelle à la largeur
-    imgSize = Math.max(40, width / 20); // minimum 40px, sinon ~5% largeur
+  const computedStyle = getComputedStyle(canvas);
+  const width = parseFloat(computedStyle.width);
+  canvas.width = width;
+
+  if (window.innerWidth < 600) {
+    // mobile : ratio 13/8 (1.625)
+    canvas.height = width * (13 / 8);
+  } else {
+    // desktop : ratio 5/8 (0.625)
+    canvas.height = width * (5 / 8);
   }
+
+  imgSize = Math.max(40, width / 20);
+}
 
    function createDoudous(count, speedMultiplier) {
     doudous = [];
@@ -181,7 +187,7 @@
 
   function startLevel() {
     adjustCanvasSize();
-    const count = 25 + level * 10;
+    const count = 25 + level * 20;
     const speed = 0.5 + level * 0.25;
     createDoudous(count, speed);
     startTimer();
